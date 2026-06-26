@@ -1,6 +1,6 @@
 # pokactx-skills
 
-APM (Agent Package Manager) Producer パッケージ。`forge-loop` スキルと、その Phase 4 で使う `implementer` / `reviewer` sub-agent を同梱し、Cursor / Claude Code / Codex の各 harness へ `apm install` 一発で配布できる。
+APM (Agent Package Manager) Producer パッケージ。`forge-loop` / `url-summarize` スキルと、それぞれで使う sub-agent（`implementer` / `reviewer` / `verifier` / `deliverer` / `summarizer`）を同梱し、Cursor / Claude Code / Codex の各 harness へ `apm install` 一発で配布できる。
 
 - [APM 公式ドキュメント](https://microsoft.github.io/apm/)
 - [Targets matrix（配布先一覧）](https://microsoft.github.io/apm/reference/targets-matrix/)
@@ -17,7 +17,8 @@ APM (Agent Package Manager) Producer パッケージ。`forge-loop` スキルと
     │   ├── implementer.agent.md     # forge-loop Phase 4 implement pass
     │   ├── reviewer.agent.md        # forge-loop Phase 4 review pass
     │   ├── verifier.agent.md        # forge-loop Phase 5 verify pass
-    │   └── deliverer.agent.md       # forge-loop Phase 5 deliver pass (PR / commit)
+    │   ├── deliverer.agent.md       # forge-loop Phase 5 deliver pass (PR / commit)
+    │   └── summarizer.agent.md      # url-summarize Phase 2 summarization pass
     └── skills/
         ├── forge-loop/
         │   ├── SKILL.md             # 承認ゲート付き plan→implement/review→verify/deliver ループ
@@ -25,9 +26,11 @@ APM (Agent Package Manager) Producer パッケージ。`forge-loop` スキルと
         ├── rework-tracker/
         │   ├── SKILL.md             # 同一 root-cause の連続失敗を数えて安全弁を発火
         │   └── scripts/loop_state.sh
-        └── smell-detector/
-            ├── SKILL.md             # レビューの root-cause を repo 全体で検出し residual risk 化
-            └── scripts/detect.sh
+        ├── smell-detector/
+        │   ├── SKILL.md             # レビューの root-cause を repo 全体で検出し residual risk 化
+        │   └── scripts/detect.sh
+        └── url-summarize/
+            └── SKILL.md             # 単一 URL を compact 要約 + Action plan で提示
 ```
 
 ### 含まれるもの
@@ -41,6 +44,8 @@ APM (Agent Package Manager) Producer パッケージ。`forge-loop` スキルと
 | Agent | `.apm/agents/reviewer.agent.md` | implement pass 後の review pass 専用。読み取り専用、P0–P3 findings を返す |
 | Agent | `.apm/agents/verifier.agent.md` | review クリア後の verify pass 専用。読み取り専用、検証結果と `All pass` を返す |
 | Agent | `.apm/agents/deliverer.agent.md` | verify クリア後の deliver pass 専用。PR を開く、または commit-only で納品 |
+| Skill | `.apm/skills/url-summarize/SKILL.md` | 単一 URL を取得し、compact 要約・キーポイント・Action plan を提示 |
+| Agent | `.apm/agents/summarizer.agent.md` | URL 取得後の summarization pass 専用。読み取り専用、構造化ダイジェストを返す |
 
 ## Producer（このリポジトリ）の運用
 
