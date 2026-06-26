@@ -1,0 +1,9 @@
+.DS_Store
+apm_modules/
+node_modules/
+
+
+.cursor/
+.claude/
+.codex/
+.agents/
